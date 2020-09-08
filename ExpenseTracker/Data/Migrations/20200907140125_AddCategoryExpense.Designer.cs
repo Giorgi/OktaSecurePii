@@ -4,14 +4,16 @@ using ExpenseTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ExpenseTracker.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200907140125_AddCategoryExpense")]
+    partial class AddCategoryExpense
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,28 +40,6 @@ namespace ExpenseTracker.Data.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = -1,
-                            Name = "Travel"
-                        },
-                        new
-                        {
-                            Id = -2,
-                            Name = "Education"
-                        },
-                        new
-                        {
-                            Id = -3,
-                            Name = "Food"
-                        },
-                        new
-                        {
-                            Id = -4,
-                            Name = "Healthcare"
-                        });
                 });
 
             modelBuilder.Entity("ExpenseTracker.Models.Expense", b =>
