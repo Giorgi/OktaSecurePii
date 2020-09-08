@@ -27,7 +27,9 @@ namespace ExpenseTracker.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await context.Categories.ToListAsync());
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            return View(await context.Categories.Where(category => category.CreatedById == null || category.CreatedById == user.Id)
+                                                .ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -63,7 +65,7 @@ namespace ExpenseTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                category.CreatedBy = await userManager.FindByNameAsync(User.Identity.Name);
+                category.CreatedById = (await userManager.FindByNameAsync(User.Identity.Name)).Id;
                 context.Add(category);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -100,8 +102,9 @@ namespace ExpenseTracker.Controllers
             }
 
             var existingCategory = await context.FindAsync<Category>(id);
+            var user = await userManager.FindByIdAsync(category.CreatedById);
 
-            if (existingCategory.CreatedBy == null || existingCategory.CreatedBy.Id != HttpContext.User.Identity.Name)
+            if (existingCategory.CreatedById == null || user.UserName != HttpContext.User.Identity.Name)
             {
                 return NotFound();
             }
@@ -153,8 +156,9 @@ namespace ExpenseTracker.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await context.Categories.FindAsync(id);
+            var user = await userManager.FindByIdAsync(category.CreatedById);
 
-            if (category.CreatedBy == null || category.CreatedBy.Id != HttpContext.User.Identity.Name)
+            if (category.CreatedById == null || user.UserName != HttpContext.User.Identity.Name)
             {
                 return NotFound();
             }

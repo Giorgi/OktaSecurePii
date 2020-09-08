@@ -67,7 +67,7 @@ namespace ExpenseTracker.Controllers
             if (ModelState.IsValid)
             {
                 expense.CreatedAt = DateTime.Now;
-                expense.CreatedBy = await userManager.FindByNameAsync(User.Identity.Name);
+                expense.CreatedById = (await userManager.FindByNameAsync(User.Identity.Name)).Id;
 
                 context.Add(expense);
                 await context.SaveChangesAsync();

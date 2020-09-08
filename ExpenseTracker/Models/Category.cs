@@ -12,6 +12,7 @@ namespace ExpenseTracker.Models
         public string Name { get; set; }
 
         public IdentityUser CreatedBy { get; set; }
+        public string CreatedById { get; set; }
 
         public List<Expense> Expenses { get; set; }
     }
