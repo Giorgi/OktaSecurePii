@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using ExpenseTracker.Data;
+using ExpenseTracker.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,10 +29,14 @@ namespace ExpenseTracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString("DefaultConnection")))
+                .AddDbContext<DbContext, ApplicationDbContext>();
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserManager<OktaUserManager<IdentityUser>>().AddUserStore<OktaUserStore<IdentityUser>>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
