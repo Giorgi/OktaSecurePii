@@ -11,7 +11,6 @@ namespace ExpenseTracker.Models
 
         public DateTime CreatedAt { get; set; }
 
-        public IdentityUser CreatedBy { get; set; }
         public string CreatedById { get; set; }
 
         public Category Category { get; set; }
