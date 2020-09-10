@@ -37,6 +37,13 @@ namespace ExpenseTracker
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserManager<OktaUserManager<IdentityUser>>().AddUserStore<OktaUserStore<IdentityUser>>();
 
+            services.AddAuthentication().AddOkta(options =>
+            {
+                options.Domain = Configuration["Okta:Domain"];
+                options.ClientId = Configuration["Okta:ClientId"];
+                options.ClientSecret = Configuration["Okta:ClientSecret"];
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
