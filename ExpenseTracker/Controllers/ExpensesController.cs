@@ -25,10 +25,10 @@ namespace ExpenseTracker.Controllers
         // GET: Expenses
         public async Task<IActionResult> Index()
         {
-            var user = await userManager.FindByIdAsync(User.Identity.Name);
-            var applicationDbContext = context.Expenses.Where(expense => expense.CreatedById == user.Id)
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            var expenses = Queryable.Where(context.Expenses, expense => expense.CreatedById == user.Id)
                                                         .Include(e => e.Category);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await expenses.ToListAsync());
         }
 
         // GET: Expenses/Details/5

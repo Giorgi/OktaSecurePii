@@ -28,8 +28,7 @@ namespace ExpenseTracker.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await userManager.FindByNameAsync(User.Identity.Name);
-            return View(await context.Categories.Where(category => category.CreatedById == null || category.CreatedById == user.Id)
-                                                .ToListAsync());
+            return View(await Queryable.Where(context.Categories, category => category.CreatedById == null || category.CreatedById == user.Id).ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -40,8 +39,7 @@ namespace ExpenseTracker.Controllers
                 return NotFound();
             }
 
-            var category = await context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(context.Categories, m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -140,8 +138,7 @@ namespace ExpenseTracker.Controllers
                 return NotFound();
             }
 
-            var category = await context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(context.Categories, m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
